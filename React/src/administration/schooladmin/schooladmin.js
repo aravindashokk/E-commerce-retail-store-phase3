@@ -9,15 +9,18 @@ import confirmIcon from '../../assets/images/tick.png';
 import discardIcon from '../../assets/images/close.png';
 import edit from '../../assets/images/edit.png';
 function SchoolAdmin() {
-    const [orders, setOrders] = useState([]);
-    const [equipments, setEquipments] = useState([]);
+    const [clubs, setClubs] = useState([]);
+    const [posts, setPosts] = useState([]);
     const [customers, setCustomers] = useState([]);
-    const [employee, setEmployee] = useState([]);
+    const [business, setBusiness] = useState([]);
     useEffect(() => {
         validateSession('SchoolAdmin');
         document.getElementsByClassName('nav-item active')[0].classList.remove('active');
         document.getElementById('authenticationTab').classList.add('active');
        getAllCustomers();
+       getAllBusinessOwner();
+       getAllPosts();
+       getAllClubs();
     }, []);
 
     const getAllCustomers=() => {
@@ -25,6 +28,30 @@ function SchoolAdmin() {
         .then(res=> {
             console.log(res.data)
             setCustomers(res.data)
+        })
+    }
+
+    const getAllBusinessOwner=() => {
+        axios.get("http://localhost/wdm_phase3/React/src/api/getbusinessowners.php")
+        .then(res=> {
+            console.log(res.data)
+            setBusiness(res.data)
+        })
+    }
+
+    const getAllPosts=() => {
+        axios.get("http://localhost/wdm_phase3/React/src/api/getposts.php")
+        .then(res=> {
+            console.log(res.data)
+            setPosts(res.data)
+        })
+    }
+
+    const getAllClubs=() => {
+        axios.get("http://localhost/wdm_phase3/React/src/api/getclubs.php")
+        .then(res=> {
+            console.log(res.data)
+            setClubs(res.data)
         })
     }
     
@@ -76,120 +103,108 @@ function SchoolAdmin() {
                         </div>
                     </div>
 
-                    {/* Manage equipment table  */}
-                    {/* <div className="d-flex flex-direction-column align-items-start section-content"><span
-                        className="font-oswald section-header">Manage Business Owner's </span>
+                    {/* Manage BusinessOwner  */}
+                    <div className="d-flex flex-direction-column align-items-start section-content"><span
+                        className="font-oswald section-header">Manage BusinessOwner</span>
                         <div className="table-container">
-                            <table id="equipment-table" className="material-table">
+                        <table id="customer-table" className="material-table">
                                 <tbody>
                                     <tr>
-                                        <th>ID</th>
-                                        <th>Equipment Type</th>
-                                        <th>Model No</th>
-                                        <th>Brand Name</th>
-                                        <th>Load Capacity</th>
-                                        <th>Status</th>
-                                        <th>Order ID</th>
+                                        
+                                        <th>First Nmae</th>
+                                        <th>Last Name</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                        <th>User_Type</th>
                                         <th className="text-align-center"><img className="cursor-pointer" title="Add Record"
-                                            onClick={() => addEquipmentColumn()} src={add} height="13px"
+                                            onClick={() => { }} src={add} height="13px"
                                             width="13px" alt='add records' /></th>
                                     </tr>
-                                    {equipments.map(equipment => {
-                                        if ((equipment.editEquipment || equipment.addEquipment))
-                                            return (<tr>
-                                                <td>{equipment.ID}</td>
-                                                <td>
-                                                    <select name="Equipment_Type" id="equipmentType" className="font-roboto" value={equipment.Equipment_Type} onChange={(event) => handleEqpChange(event, equipment)} required>
-                                                        <option value="Washing Machine" >Washing Machine</option>
-                                                        <option value="Dryer">Dryer</option>
-                                                        <option value="Iron Box">Iron Box</option>
-                                                        <option value="Weights">Weights</option>
-                                                        <option value="Basket">Basket</option>
-                                                    </select>
-                                                </td>
-                                                <td><input type="text" id="modelNo" name="Model_No" className="font-roboto" placeholder="Model No" value={equipment.Model_No} onChange={(event) => handleEqpChange(event, equipment)} required /></td>
-                                                <td><input type="text" id="brandName" name="Brand_Name" className="font-roboto" placeholder="Brand_Name" value={equipment.Brand_Name} onChange={(event) => handleEqpChange(event, equipment)} required /></td>
-                                                <td><input type="number" id="loadCapacity" className="font-roboto" name="Load_Capacity" placeholder="Load_Capacity" value={equipment.Load_Capacity} onChange={(event) => handleEqpChange(event, equipment)} required /></td>
-                                                <td><select name="Status" id="status" className="font-roboto" value={equipment.Status} onChange={(event) => handleEqpChange(event, equipment)} required>
-                                                    <option value="Available" >Available</option>
-                                                    <option value="InUse">In Use</option>
-                                                </select></td>
-                                                <td><input type="number" id="orderid" name="Order_ID" placeholder="Order ID" value={equipment.Order_ID} onChange={(event) => handleEqpChange(event, equipment)} required /></td>
-                                                <td>
-                                                    <span className="action-icons">
-                                                        <img src={confirmIcon} onClick={() => addOrEditEquipment(equipment)} title="Confirm" />
-                                                        <img src={discardIcon} onClick={() => equipment.editEquipment = false} title="Cancel" />
-                                                    </span></td>
-                                            </tr>);
-                                        else return (
-                                            <tr>
-                                                <td>{equipment.ID}</td>
-                                                <td>{equipment.Equipment_Type}</td>
-                                                <td>{equipment.Model_No}</td>
-                                                <td>{equipment.Brand_Name}</td>
-                                                <td>{equipment.Load_Capacity}</td>
-                                                <td>{equipment.Status}</td>
-                                                <td>{equipment.Order_ID}</td>
-                                                <td>
-                                                    <span className="action-icons">
-                                                        <img src={edit} onClick={() => editEquipmentColumn(equipment)} title="edit" />
-                                                        <img src={deleteIcon} onClick={() => deleteEqp(equipment.ID)} title="delete" />
-                                                    </span>
-                                                </td>
-                                            </tr>)
-                                    })}
+                                    {business.map(customer => (
+                                        <tr>
+                                            
+                                            <td>{customer.First_Name}</td>
+                                            <td>{customer.Last_Name}</td>
+                                            <td>{customer.Email}</td>
+                                            <td>{customer.Phone}</td>
+                                            <td>{customer.User_Type}</td>
+                                            <td>{''}</td>
+                                           
+                                        </tr>))}
+                                   
                                 </tbody>
                             </table>
                         </div>
-                    </div> */}
+                    </div>
                 </div>
 
                 {/* Horizontal row section containing multiple tables  */}
                 <div className="d-flex flex-direction-row justify-around section-container" id="manager-actions">
 
-                    {/* Manual Order table  */}
-                    {/* <div className="d-flex flex-direction-column align-items-start section-content"><span
-                        className="font-oswald section-header">Manual Order</span>
-                        <div className="d-flex flex-direction-row order-container">
-                            <div className="d-flex flex-direction-column justify-between">
-                                <input type="text" placeholder="Customer Name" required="required" />
-                                <input type="text" placeholder="Phone Number" required="required" maxLength="10" />
-                                <label>Service Type:</label>
-                                <select name="services" id="services">
-                                    <option value="Washing">Washing</option>
-                                    <option value="Drying">Drying</option>
-                                    <option value="Ironing">Ironing</option>
-                                    <option value="Pickup">Pickup</option>
-                                    <option value="Delivery">Delivery</option>
-                                </select>
-                            </div>
-                            <div className="d-flex flex-direction-column justify-between">
-                                <input type="text-area" placeholder="Description" />
-                                <input type="submit" className="btn submit-order" />
-                            </div>
-                        </div>
-                    </div> */}
-
-                    {/* Manage tasks table  */}
-                    {/* <div className="d-flex flex-direction-column align-items-start section-content"><span
-                        className="font-oswald section-header">Manage Tasks</span>
+                    {/* Moderate Posts  */}
+                    <div className="d-flex flex-direction-column align-items-start section-content"><span
+                        className="font-oswald section-header">Moderate Posts</span>
                         <div className="table-container">
-                            <table id="tasks-table" className="material-table">
+                        <table id="customer-table" className="material-table">
                                 <tbody>
                                     <tr>
-                                        <th>#</th>
-                                        <th>Name</th>
-                                        <th>Assigned to</th>
-                                        <th>Desc</th>
-                                        <th>Services</th>
+                                        
+                                        <th>Post ID</th>
+                                        <th>Creator ID</th>
+                                        <th>Post Description</th>
+                                        <th>Created_Date</th>
                                         <th className="text-align-center"><img className="cursor-pointer" title="Add Record"
-                                            src={add} height="13px"
-                                            width="13px" alt='add-record' /></th>
+                                            onClick={() => { }} src={add} height="13px"
+                                            width="13px" alt='add records' /></th>
                                     </tr>
+                                    {posts.map(customer => (
+                                        <tr>
+                                            
+                                            <td>{customer.post_ID}</td>
+                                            <td>{customer.creator_id}</td>
+                                            <td>{customer.post_desc}</td>
+                                            <td>{customer.created_date}</td>
+                                            <td>{''}</td>
+                                           
+                                        </tr>))}
+                                   
                                 </tbody>
                             </table>
                         </div>
-                    </div> */}
+                    </div>
+                    {/* Moderate Clubs  */}
+                    <div className="d-flex flex-direction-column align-items-start section-content"><span
+                        className="font-oswald section-header">Moderate Clubs</span>
+                        <div className="table-container">
+                        <table id="customer-table" className="material-table">
+                                <tbody>
+                                    <tr>
+                                        
+                                        <th>Club ID</th>
+                                        <th>Club Name</th>
+                                        <th>Club Email</th>
+                                        <th>School ID</th>
+                                        <th>Club Description</th>
+                                        <th className="text-align-center"><img className="cursor-pointer" title="Add Record"
+                                            onClick={() => { }} src={add} height="13px"
+                                            width="13px" alt='add records' /></th>
+                                    </tr>
+                                    {clubs.map(customer => (
+                                        <tr>
+                                            
+                                            <td>{customer.club_ID}</td>
+                                            <td>{customer.club_name}</td>
+                                            <td>{customer.club_email}</td>
+                                            <td>{customer.school_Id}</td>
+                                            <td>{customer.club_description}</td>
+                                            <td>{''}</td>
+                                           
+                                        </tr>))}
+                                   
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
 
                 {/* Horizontal row section containing multiple tables  */}
